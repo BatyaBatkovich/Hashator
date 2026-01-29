@@ -1,7 +1,9 @@
 import hashlib
 from dataclasses import dataclass  # -> j'ai vu cela en cours ))
+import json
 
-# import kagglehub
+# import inspect -> a tester plus tard
+# import kagglehub -> une lib de merde
 from collections.abc import Callable  # PEP 585 -> a relire
 from typing import (
     Any,
@@ -36,7 +38,8 @@ class Hashator:
     array_to_hash: list[bytes] | None  # le massiv de data qu'on souhaite hasher
     # result_of_hash: None  # le result de hash
 
-    # def from_list(self): #need to be bytes after this method
+    def from_list(self, data):  # need to be bytes after this method
+        self.array_to_hash = [str(i).encode() for i in data]
 
     def from_integer(self, data):
         self.array_to_hash = [str(data).encode()]
@@ -48,7 +51,9 @@ class Hashator:
 
     def from_file(self): ...
 
-    def hashtor(self, func_hashage: Callable[[bytes], Any]) -> str:
+    def hashtor(
+        self, func_hashage: Callable[[bytes], Any]
+    ) -> str:  # JE VEUX BIEN UNE STRING C'EST UN CHOIX DU DESIGN
         if not self.array_to_hash:
             return "Hashator need data XD"
         result = b"".join(self.array_to_hash)
@@ -78,9 +83,16 @@ class Hashator:
 
 # print("Path to dataset files:", path)
 
-# Machine_for_hash = Hashator(None)  # fait lui manger ta chaine :wa hasher
+Machine_for_hash = Hashator(None)  # fait lui manger ta chaine :wa hasher
 
-# Machine_for_hash2 = Hashator(None)
+Machine_for_hash2 = Hashator(None)
 # Machine_for_hash2.from_integer(12345666532234)  # -> on charge dans la machine
-Machine_for_hash.from_str("swededededed")
-print(Machine_for_hash.hashtor(hashlib.md5))
+Machine_for_hash.from_list([11223, 54445, 45423])
+print(Machine_for_hash.hashtor(hashlib.sha224))
+
+# print(dir(hashlib))
+print("------------")
+print(Machine_for_hash.hashtor(hashlib.sha1))
+
+# print(help(hashlib))
+print(hashlib.algorithms_guaranteed)
