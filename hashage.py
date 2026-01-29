@@ -6,7 +6,9 @@ from dataclasses import dataclass  # -> j'ai vu cela en cours ))
 # import pyhash
 # import Crypto.Hash
 import zlib
-from passlib.hash import lmhash, des_crypt, apr_md5_crypt, mssql2000
+import passlib.registry
+
+from passlib.hash import lmhash, mssql2000
 
 # import inspect -> a tester plus tard
 # import kagglehub -> une lib de merde
@@ -116,11 +118,14 @@ print("------------")
 # print(f"GOST-256: {Machine_for_hash.hashtor(streebog256)}")
 # print(f"GOST-512: {Machine_for_hash.hashtor(streebog512)}")
 # 1.  (LM Hash)
-print(f"Win95 LM:   {Machine_for_hash.hashtor(lmhash.hash)}")
+# print(f"Win95 LM:   {Machine_for_hash.hashtor(lmhash.hash)}")
 
-print(f"Unix DES:   {Machine_for_hash.hashtor(des_crypt.hash)}")
+# print(f"Unix DES:   {Machine_for_hash.hashtor(des_crypt.hash)}")
 
 print(f"SQL 2000:   {Machine_for_hash.hashtor(mssql2000.hash)}")
 
+# all_algos = passlib.registry.list_crypt_handlers()
+# for algo_name in all_algos:
+#    print(algo_name)
 # print(help(hashlib))
 # print(hashlib.algorithms_guaranteed)
