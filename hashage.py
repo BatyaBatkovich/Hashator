@@ -1,6 +1,12 @@
 import hashlib
 from dataclasses import dataclass  # -> j'ai vu cela en cours ))
-import json
+# import json
+# from streebog import streebog256, streebog512
+
+# import pyhash
+# import Crypto.Hash
+import zlib
+from passlib.hash import lmhash, des_crypt, apr_md5_crypt, mssql2000
 
 # import inspect -> a tester plus tard
 # import kagglehub -> une lib de merde
@@ -56,8 +62,18 @@ class Hashator:
     ) -> str:  # JE VEUX BIEN UNE STRING C'EST UN CHOIX DU DESIGN
         if not self.array_to_hash:
             return "Hashator need data XD"
-        result = b"".join(self.array_to_hash)
-        return func_hashage(result).hexdigest()
+        result = b"".join(
+            self.array_to_hash
+        )  # on recolle en une string de bytes -> [b'Hello', b' ', b'World'] on passe a -> b'Hello World'
+        raw_output = func_hashage(result)
+        if isinstance(raw_output, int):  # est-ce que c'est un int ?
+            return hex(raw_output)
+        elif hasattr(
+            raw_output, "hexdigest"
+        ):  # object possede t-il le bouton hexdigest ?
+            return raw_output.hexdigest()
+        else:
+            return str(raw_output)
 
 
 # dataset_of_string = ...
@@ -85,14 +101,26 @@ class Hashator:
 
 Machine_for_hash = Hashator(None)  # fait lui manger ta chaine :wa hasher
 
-Machine_for_hash2 = Hashator(None)
-# Machine_for_hash2.from_integer(12345666532234)  # -> on charge dans la machine
-Machine_for_hash.from_list([11223, 54445, 45423])
+# Machine_for_hash2 = Hashator(None)
+Machine_for_hash.from_integer(12345666532234)  # -> on charge dans la machine
+# Machine_for_hash.from_list([11223, 54445, 45423])
 print(Machine_for_hash.hashtor(hashlib.sha224))
 
 # print(dir(hashlib))
 print("------------")
-print(Machine_for_hash.hashtor(hashlib.sha1))
+# print(Machine_for_hash.hashtor(hash))
+print("------------")
+print(Machine_for_hash.hashtor(zlib.adler32))
+print(Machine_for_hash.hashtor(zlib.crc32))
+print("------------")
+# print(f"GOST-256: {Machine_for_hash.hashtor(streebog256)}")
+# print(f"GOST-512: {Machine_for_hash.hashtor(streebog512)}")
+# 1.  (LM Hash)
+print(f"Win95 LM:   {Machine_for_hash.hashtor(lmhash.hash)}")
+
+print(f"Unix DES:   {Machine_for_hash.hashtor(des_crypt.hash)}")
+
+print(f"SQL 2000:   {Machine_for_hash.hashtor(mssql2000.hash)}")
 
 # print(help(hashlib))
-print(hashlib.algorithms_guaranteed)
+# print(hashlib.algorithms_guaranteed)
