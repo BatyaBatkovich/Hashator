@@ -2,7 +2,10 @@ import hashlib
 from dataclasses import dataclass  # -> j'ai vu cela en cours ))
 
 # import kagglehub
-from collections.abc import Callable
+from collections.abc import Callable  # PEP 585 -> a relire
+from typing import (
+    Any,
+)  # -> pour ne pas faire les remarque sur le type utiliser ( IDE,LINTER)
 
 ### EXEMPLE TROUVER SUR HABR.RU ###
 
@@ -30,21 +33,26 @@ from collections.abc import Callable
 
 @dataclass
 class Hashator:
-    array_to_hash: list[bytes]  # le massiv de data qu'on souhaite hasher
+    array_to_hash: list[bytes] | None  # le massiv de data qu'on souhaite hasher
     # result_of_hash: None  # le result de hash
 
     # def from_list(self): #need to be bytes after this method
 
     def from_integer(self, data):
-        self.array_to_hash = str(data).encode()
+        self.array_to_hash = [str(data).encode()]
         return self.array_to_hash
 
-    def from_str(self): ...
+    def from_str(self, data):
+        self.array_to_hash = [data.encode()]
+        return self.array_to_hash
 
     def from_file(self): ...
 
     def hashtor(self, func_hashage: Callable[[bytes], Any]) -> str:
-        return func_hashage(self.array_to_hash).hexdigest()
+        if not self.array_to_hash:
+            return "Hashator need data XD"
+        result = b"".join(self.array_to_hash)
+        return func_hashage(result).hexdigest()
 
 
 # dataset_of_string = ...
@@ -70,7 +78,9 @@ class Hashator:
 
 # print("Path to dataset files:", path)
 
-Machine_for_hash = Hashator(None)  # fait lui manger ta chaine :wa hasher
+# Machine_for_hash = Hashator(None)  # fait lui manger ta chaine :wa hasher
 
-Machine_for_hash.from_integer(12345666532234)  # -> on charge dans la machine
+# Machine_for_hash2 = Hashator(None)
+# Machine_for_hash2.from_integer(12345666532234)  # -> on charge dans la machine
+Machine_for_hash.from_str("swededededed")
 print(Machine_for_hash.hashtor(hashlib.md5))
