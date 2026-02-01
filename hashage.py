@@ -57,11 +57,14 @@ class Hashator:
         self.array_to_hash = [data.encode()]
         return self.array_to_hash
 
-    def from_file(self): ...
+    def from_file(self, filename):
+        with open(filename, "r", errors="ignore") as file:
+            self.array_to_hash = [line.strip().encode() for line in file]
+        return self.array_to_hash
 
     def hashtor(
-        self, func_hashage: Callable[[bytes], Any]
-    ) -> str:  # JE VEUX BIEN UNE STRING C'EST UN CHOIX DU DESIGN
+        self, func_hashage: Callable[[bytes | Any], Any]
+    ) -> str:  # FINALEMENT UNE STRING C LA MERDE - A REFAIRE TOUT ICI POUR RECEVOIR UNE LISTE DES HASH
         if not self.array_to_hash:
             return "Hashator need data XD"
         result = b"".join(
@@ -104,16 +107,17 @@ class Hashator:
 Machine_for_hash = Hashator(None)  # fait lui manger ta chaine :wa hasher
 
 # Machine_for_hash2 = Hashator(None)
-Machine_for_hash.from_integer(12345666532234)  # -> on charge dans la machine
+# Machine_for_hash.from_integer(12345666532234)  # -> on charge dans la machine
 # Machine_for_hash.from_list([11223, 54445, 45423])
-print(Machine_for_hash.hashtor(hashlib.sha224))
+# print(Machine_for_hash.hashtor(hashlib.sha224))
+Machine_for_hash.from_file("fr_dict.txt")
 
 # print(dir(hashlib))
 print("------------")
 # print(Machine_for_hash.hashtor(hash))
 print("------------")
-print(Machine_for_hash.hashtor(zlib.adler32))
-print(Machine_for_hash.hashtor(zlib.crc32))
+# print(Machine_for_hash.hashtor(zlib.adler32))
+# print(Machine_for_hash.hashtor(zlib.crc32))
 print("------------")
 # print(f"GOST-256: {Machine_for_hash.hashtor(streebog256)}")
 # print(f"GOST-512: {Machine_for_hash.hashtor(streebog512)}")
