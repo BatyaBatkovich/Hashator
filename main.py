@@ -9,9 +9,12 @@ if __name__ == "__main__":
     im = image(409, 409, "white")
     Machine_for_hash = Hashator(None)
     Machine_for_hash.from_file("fr_dict.txt")
-    print(f"SQL 2000:   {Machine_for_hash.hashtor(hashlib.sha224)}")
-    Machine_for_hash = Hashator(None)  # fait lui manger ta chaine hasher
+    # print(f"SQL 2000:   {Machine_for_hash.hashtor(hashlib.sha224)}")
+    # Machine_for_hash = Hashator(None)
+
+    # print(Machine_for_hash.hashtor(hashlib.sha224))
     decimal_list = list_2_coord(Machine_for_hash.hashtor(hashlib.sha224))
-    show_pixel(decimal_list)
+    print(decimal_list)
+    show_pixel(decimal_list, im)
     im.save(input("Enter the file name to save the image (with .png extension): "))
     # Machine_for_hash.from_integer(12345666532234)  # -> on charge dans la machine

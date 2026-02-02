@@ -49,7 +49,7 @@ def list_2_coord(list_data):  #  prend en parametre la liste avec les hash
     return decimal_list
 
 
-def show_pixel(decimal_list):  # Function to show pixel superpositions
+def show_pixel(decimal_list, im):  # Function to show pixel superpositions
     for x, y in decimal_list:
         x, y = int(x), int(y)
         if 0 <= x < 409 and 0 <= y < 409:  # S'assurer que x et y sont dans les limites
