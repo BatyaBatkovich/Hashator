@@ -34,6 +34,21 @@ def hash_2_coord(
     return decimal_list
 
 
+def list_2_coord(list_data):  #  prend en parametre la liste avec les hash
+    decimal_list = []  # List of tuples to store decimal numbers
+    for item in list_data:
+        hash_string = item
+        decimalx = (
+            int(hash_string[:3], 16) / 10
+        )  # Convert first 3 characters of hash to decimal to get x coordinate
+        decimaly = (
+            int(hash_string[-3:], 16) / 10
+        )  # Convert last 3 characters of hash to decimal to get y coordinate
+        decimal_list.append((decimalx, decimaly))  # Creating a list of with x and y
+
+    return decimal_list
+
+
 def show_pixel(decimal_list):  # Function to show pixel superpositions
     for x, y in decimal_list:
         x, y = int(x), int(y)
@@ -53,11 +68,7 @@ def show_pixel(decimal_list):  # Function to show pixel superpositions
                 )  # Change to blue dot for multiple collisions
 
 
-im = image(
-    409, 409, "white"
-)  # Create a blank image of size 409x409 with white background
-decimal_list = hash_2_coord(
-    "sha1rand.txt"
-)  # Get the list of decimal coordinates from the file
-show_pixel(decimal_list)  # Show pixel superpositions
-im.save(input("Enter the file name to save the image (with .png extension): "))
+# im = image(409, 409, "white")  # Create a blank image of size 409x409 with white background
+# decimal_list = hash_2_coord("sha1rand.txt") # Get the list of decimal coordinates from the file
+# show_pixel(decimal_list)  # Show pixel superpositions
+# im.save(input("Enter the file name to save the image (with .png extension): "))

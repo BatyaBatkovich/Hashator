@@ -64,24 +64,24 @@ class Hashator:
 
     def hashtor(
         self, func_hashage: Callable[[bytes | Any], Any]
-    ) -> str:  # FINALEMENT UNE STRING C LA MERDE - A REFAIRE TOUT ICI POUR RECEVOIR UNE LISTE DES HASH
+    ) -> list:  # FINALEMENT UNE STRING C LA MERDE - A REFAIRE TOUT ICI POUR RECEVOIR UNE LISTE DES HASH
         if not self.array_to_hash:
-            return "Hashator need data XD"
-        result = b"".join(
-            self.array_to_hash
-        )  # on recolle en une string de bytes -> [b'Hello', b' ', b'World'] on passe a -> b'Hello World'
-        raw_output = func_hashage(result)
-        if isinstance(raw_output, int):  # est-ce que c'est un int ?
-            return hex(raw_output)
-        elif hasattr(
-            raw_output, "hexdigest"
-        ):  # object possede t-il le bouton hexdigest ?
-            return raw_output.hexdigest()
-        else:
-            return str(raw_output)
+            return []
+
+        result_list = []
+        for element in self.array_to_hash:
+            raw_output = func_hashage(element)
+            if isinstance(raw_output, int):
+                result_list.append(hex(raw_output))
+            elif hasattr(raw_output, "hexdigest"):
+                result_list.append(raw_output.hexdigest())
+            else:
+                result_list.append(str(raw_output))
+        return result_list
+
+        # dataset_of_string = ...
 
 
-# dataset_of_string = ...
 # dataset_of_list = ...
 # dataset_of_string = ...
 # dataset_of_int    = ...
@@ -104,13 +104,13 @@ class Hashator:
 
 # print("Path to dataset files:", path)
 
-Machine_for_hash = Hashator(None)  # fait lui manger ta chaine :wa hasher
+# Machine_for_hash = Hashator(None)  # fait lui manger ta chaine :wa hasher
 
 # Machine_for_hash2 = Hashator(None)
 # Machine_for_hash.from_integer(12345666532234)  # -> on charge dans la machine
 # Machine_for_hash.from_list([11223, 54445, 45423])
 # print(Machine_for_hash.hashtor(hashlib.sha224))
-Machine_for_hash.from_file("fr_dict.txt")
+# Machine_for_hash.from_file("fr_dict.txt")
 
 # print(dir(hashlib))
 print("------------")
@@ -126,7 +126,7 @@ print("------------")
 
 # print(f"Unix DES:   {Machine_for_hash.hashtor(des_crypt.hash)}")
 
-print(f"SQL 2000:   {Machine_for_hash.hashtor(mssql2000.hash)}")
+# print(f"SQL 2000:   {Machine_for_hash.hashtor(mssql2000.hash)}")
 
 # all_algos = passlib.registry.list_crypt_handlers()
 # for algo_name in all_algos:
