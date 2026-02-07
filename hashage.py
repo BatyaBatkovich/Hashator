@@ -82,6 +82,14 @@ class Hashator:
         # dataset_of_string = ...
 
 
+# source : https://stackoverflow.com/questions/36238076/what-is-the-equivalent-c-c-loselose-algorithm-in-python
+def lose_lose(data: bytes) -> int:
+    hsh = 0
+    for bytes in data:
+        hsh += bytes
+    return hsh
+
+
 # dataset_of_list = ...
 # dataset_of_string = ...
 # dataset_of_int    = ...
@@ -128,8 +136,8 @@ print("------------")
 
 # print(f"SQL 2000:   {Machine_for_hash.hashtor(mssql2000.hash)}")
 
-# all_algos = passlib.registry.list_crypt_handlers()
-# for algo_name in all_algos:
-#    print(algo_name)
+all_algos = passlib.registry.list_crypt_handlers()
+for algo_name in all_algos:
+    print(algo_name)
 # print(help(hashlib))
-# print(hashlib.algorithms_guaranteed)
+print(hashlib.algorithms_guaranteed)

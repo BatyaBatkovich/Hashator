@@ -1,4 +1,4 @@
-from hashage import Hashator
+from hashage import Hashator, lose_lose
 from Create_image import image, list_2_coord, show_pixel
 from passlib.hash import lmhash, mssql2000
 import hashlib
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # Machine_for_hash = Hashator(None)
 
     # print(Machine_for_hash.hashtor(hashlib.sha224))
-    decimal_list = list_2_coord(Machine_for_hash.hashtor(hashlib.sha224))
+    decimal_list = list_2_coord(Machine_for_hash.hashtor(lose_lose))
     print(decimal_list)
     show_pixel(decimal_list, im)
     im.save(input("Enter the file name to save the image (with .png extension): "))

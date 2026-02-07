@@ -38,6 +38,10 @@ def list_2_coord(list_data):  #  prend en parametre la liste avec les hash
     decimal_list = []  # List of tuples to store decimal numbers
     for item in list_data:
         hash_string = item
+        if hash_string.startswith("0x"):
+            hash_string = hash_string[2:]
+        if len(hash_string) < 6:
+            hash_string = hash_string.zfill(6)
         decimalx = (
             int(hash_string[:3], 16) / 10
         )  # Convert first 3 characters of hash to decimal to get x coordinate
