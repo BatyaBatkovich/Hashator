@@ -70,4 +70,3 @@ def show_pixel(decimal_list, im):  # Function to show pixel superpositions
                 im.set_pixel(
                     x, y, (0, 0, 255)
                 )  # Change to blue dot for multiple collisions
-
