@@ -71,8 +71,3 @@ def show_pixel(decimal_list, im):  # Function to show pixel superpositions
                     x, y, (0, 0, 255)
                 )  # Change to blue dot for multiple collisions
 
-
-# im = image(409, 409, "white")  # Create a blank image of size 409x409 with white background
-# decimal_list = hash_2_coord("sha1rand.txt") # Get the list of decimal coordinates from the file
-# show_pixel(decimal_list)  # Show pixel superpositions
-# im.save(input("Enter the file name to save the image (with .png extension): "))
