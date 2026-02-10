@@ -62,11 +62,11 @@ def show_pixel(decimal_list, im):  # Function to show pixel superpositions
             )  # Check if a pixel already exists at this position
             if current_color == (255, 255, 255):  # If it's white
                 im.set_pixel(
-                    x, y, (0, 255, 0)
-                )  # Green dot is set in case of no collision
-            elif current_color == (0, 255, 0):  # If it's white
-                im.set_pixel(x, y, (255, 0, 0))  # Green dot is set if no collision
-            elif current_color == (255, 0, 0):  # If it's already red
+                    x, y, (255, 255, 120)
+                )  # Yellow dot is set in case of no collision
+            elif current_color == (255, 255, 120):  # If it's yellow
+                im.set_pixel(x, y, (255, 165, 0))  # orange dot is set if collision
+            elif current_color == (255, 165, 0):  # If it's already orange
                 im.set_pixel(
-                    x, y, (0, 0, 255)
-                )  # Change to blue dot for multiple collisions
+                    x, y, (255, 30, 30)
+                )  # Change to red dot for multiple collisions

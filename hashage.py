@@ -90,6 +90,28 @@ def lose_lose(data: bytes) -> int:
     return hsh
 
 
+def get_available_algos() -> list[str]:
+    algos: list[str] = []
+    try:
+        algos.extend(sorted(passlib.registry.list_crypt_handlers()))
+    except Exception:
+        pass
+
+    try:
+        algos.extend(sorted(hashlib.algorithms_guaranteed))
+    except Exception:
+        pass
+
+    seen: set[str] = set()
+    unique_algos: list[str] = []
+    for algo in algos:
+        if algo in seen:
+            continue
+        seen.add(algo)
+        unique_algos.append(algo)
+    return unique_algos
+
+
 # dataset_of_list = ...
 # dataset_of_string = ...
 # dataset_of_int    = ...
@@ -121,23 +143,12 @@ def lose_lose(data: bytes) -> int:
 # Machine_for_hash.from_file("fr_dict.txt")
 
 # print(dir(hashlib))
-print("------------")
 # print(Machine_for_hash.hashtor(hash))
-print("------------")
 # print(Machine_for_hash.hashtor(zlib.adler32))
 # print(Machine_for_hash.hashtor(zlib.crc32))
-print("------------")
 # print(f"GOST-256: {Machine_for_hash.hashtor(streebog256)}")
 # print(f"GOST-512: {Machine_for_hash.hashtor(streebog512)}")
-# 1.  (LM Hash)
 # print(f"Win95 LM:   {Machine_for_hash.hashtor(lmhash.hash)}")
-
 # print(f"Unix DES:   {Machine_for_hash.hashtor(des_crypt.hash)}")
-
 # print(f"SQL 2000:   {Machine_for_hash.hashtor(mssql2000.hash)}")
-
-all_algos = passlib.registry.list_crypt_handlers()
-for algo_name in all_algos:
-    print(algo_name)
 # print(help(hashlib))
-print(hashlib.algorithms_guaranteed)
