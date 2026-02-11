@@ -14,7 +14,7 @@ from passlib.hash import lmhash, mssql2000
 # import kagglehub -> une lib de merde
 from collections.abc import Callable  # PEP 585 -> a relire
 from typing import (
-    Any
+    Any,
 )  # -> pour ne pas faire les remarque sur le type utiliser ( IDE,LINTER)
 
 ### EXEMPLE TROUVER SUR HABR.RU ###
@@ -71,7 +71,7 @@ class Hashator:
         result_list = []
         for element in self.array_to_hash:
             raw_output = func_hashage(element)
-            #print(f"Hashing element: {element} -> Raw output: {raw_output}")
+            # print(f"Hashing element: {element} -> Raw output: {raw_output}")
             if isinstance(raw_output, int):
                 result_list.append(hex(raw_output))
             elif hasattr(raw_output, "hexdigest"):
@@ -93,10 +93,6 @@ def lose_lose(data: bytes) -> int:
 
 def get_available_algos() -> list[str]:
     algos: list[str] = []
-    try:
-        algos.extend(sorted(passlib.registry.list_crypt_handlers()))
-    except Exception:
-        pass
 
     try:
         algos.extend(sorted(hashlib.algorithms_guaranteed))
