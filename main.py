@@ -1,6 +1,6 @@
 import hashlib
 from Create_image import image, list_2_coord, show_pixel
-from hashage import Hashator, get_available_algos, lose_lose
+from hashage import Hashator, get_available_algos, resolve_hash_algo
 from hashator_cli import ASCII_BANNER, build_parser, format_list
 from passlib.hash import lmhash, mssql2000
 
@@ -18,6 +18,13 @@ if __name__ == "__main__":
         if not args.dest or not args.hash_algo:
             parser.print_help()
         else:
+            hash_func = resolve_hash_algo(args.hash_algo)
+            if not hash_func:
+                print(f"Algo inconnu: {args.hash_algo}")
+                print("Algorithmes disponibles:")
+                print(format_list(get_available_algos()))
+                raise SystemExit(2)
+
             # D'abord il faut faire une strucuture de data qui stock les hash
             im = image(409, 409, "white")
             Machine_for_hash = Hashator(None)
@@ -26,7 +33,7 @@ if __name__ == "__main__":
             # Machine_for_hash = Hashator(None)
 
             # print(Machine_for_hash.hashtor(hashlib.sha224))
-            decimal_list = list_2_coord(Machine_for_hash.hashtor(lose_lose))
+            decimal_list = list_2_coord(Machine_for_hash.hashtor(hash_func))
             #print(decimal_list)
             show_pixel(decimal_list, im)
             im.save(args.dest)

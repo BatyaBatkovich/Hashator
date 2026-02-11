@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import argparse
 from typing import Iterable
 
@@ -36,6 +35,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--list-algos",
+        "-l",
         action="store_true",
         help="Display the list of available algorithms.",
     )
