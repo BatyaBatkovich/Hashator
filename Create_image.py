@@ -14,26 +14,6 @@ class image:
         self.img.save(filename)
 
 
-def hash_2_coord(
-    filename,
-):  #  Function that reads a file line by line, converts each hash to two decimal numbers and returns a list of tuples
-    with open(filename, "r") as file:
-        lines = file.readlines()
-
-    decimal_list = []  # List of tuples to store decimal numbers
-    for line in lines:
-        hash_string = line.strip()  # nettoie les /n /t etc les " "
-        decimalx = (
-            int(hash_string[:3], 16) / 10
-        )  # Convert first 3 characters of hash to decimal to get x coordinate
-        decimaly = (
-            int(hash_string[-3:], 16) / 10
-        )  # Convert last 3 characters of hash to decimal to get y coordinate
-        decimal_list.append((decimalx, decimaly))  # Creating a list of with x and y
-
-    return decimal_list
-
-
 def list_2_coord(list_data):  #  prend en parametre la liste avec les hash
     decimal_list = []  # List of tuples to store decimal numbers
     for item in list_data:
@@ -42,21 +22,33 @@ def list_2_coord(list_data):  #  prend en parametre la liste avec les hash
             hash_string = hash_string[2:]
         if len(hash_string) < 6:
             hash_string = hash_string.zfill(6)
-        decimalx = (
-            int(hash_string[:3], 16) / 10
-        )  # Convert first 3 characters of hash to decimal to get x coordinate
-        decimaly = (
-            int(hash_string[-3:], 16) / 10
-        )  # Convert last 3 characters of hash to decimal to get y coordinate
-        decimal_list.append((decimalx, decimaly))  # Creating a list of with x and y
+        hash_string = int(hash_string, 16)
+        width = 512
+        height = 512
+        x = hash_string % width
+        y = (hash_string // width) % height
+
+        decimal_list.append((x, y))
+        # decimalx = (
+        #    int(hash_string[:3], 16) / 10
+        # )  # Convert first 3 characters of hash to decimal to get x coordinate
+        # decimaly = (
+        #    int(hash_string[-3:], 16) / 10
+        # )  # Convert last 3 characters of hash to decimal to get y coordinate
+        decimal_list.append((x, y))
+        # decimal_list.append((decimalx, decimaly))  # Creating a list of with x and y
 
     return decimal_list
 
 
-def show_pixel(decimal_list, im):  # Function to show pixel superpositions
+def show_pixel(
+    decimal_list, im, width=512, height=512
+):  # Function to show pixel superpositions
     for x, y in decimal_list:
         x, y = int(x), int(y)
-        if 0 <= x < 409 and 0 <= y < 409:  # S'assurer que x et y sont dans les limites
+        if (
+            0 <= x < width and 0 <= y < height
+        ):  # S'assurer que x et y sont dans les limites
             current_color = im.img.getpixel(
                 (x, y)
             )  # Check if a pixel already exists at this position

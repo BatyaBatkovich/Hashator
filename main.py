@@ -26,7 +26,7 @@ if __name__ == "__main__":
                 raise SystemExit(2)
 
             # D'abord il faut faire une strucuture de data qui stock les hash
-            im = image(409, 409, "white")
+            im = image(512, 512, "white")
             Machine_for_hash = Hashator(None)
             Machine_for_hash.from_file(args.file)
             # print(f"SQL 2000:   {Machine_for_hash.hashtor(hashlib.sha224)}")
@@ -34,8 +34,10 @@ if __name__ == "__main__":
 
             # print(Machine_for_hash.hashtor(hashlib.sha224))
             decimal_list = list_2_coord(Machine_for_hash.hashtor(hash_func))
-            #print(decimal_list)
+            # print(decimal_list)
             show_pixel(decimal_list, im)
             im.save(args.dest)
-            print(f"Image of hash generated and saved as '{args.dest}' with algorithm '{args.hash_algo}' on file '{args.file}'.")
+            print(
+                f"Image of hash generated and saved as '{args.dest}' with algorithm '{args.hash_algo}' on file '{args.file}'."
+            )
             # Machine_for_hash.from_integer(12345666532234)  # -> on charge dans la machine

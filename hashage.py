@@ -1,44 +1,10 @@
 import hashlib
 from dataclasses import dataclass  # -> j'ai vu cela en cours ))
-# import json
-# from streebog import streebog256, streebog512
-
-# import pyhash
-# import Crypto.Hash
 import zlib
-import passlib.registry
-
-from passlib.hash import lmhash, mssql2000
-
-# import inspect -> a tester plus tard
-# import kagglehub -> une lib de merde
 from collections.abc import Callable  # PEP 585 -> a relire
 from typing import (
     Any,
-)  # -> pour ne pas faire les remarque sur le type utiliser ( IDE,LINTER)
-
-### EXEMPLE TROUVER SUR HABR.RU ###
-
-# example_string = "Hello, World!"
-
-# md5_hash = hashlib.md5(example_string.encode()).hexdigest()
-# print(f"MD5: {md5_hash}")
-
-# SHA-1
-# sha1_hash = hashlib.sha1(example_string.encode()).hexdigest()
-# print(f"SHA-1: {sha1_hash}")
-
-# SHA-256
-# sha256_hash = hashlib.sha256(example_string.encode()).hexdigest()
-# print(f"SHA-256: {sha256_hash}")
-
-### MEOW MEOW MEOW ####
-
-
-# "mp4" "mp3"   "jpg"   10100101010 1a3f2b
-
-
-# encode -> "01020200101"  bin = 010101010010
+)
 
 
 @dataclass
@@ -80,8 +46,6 @@ class Hashator:
                 result_list.append(str(raw_output))
         return result_list
 
-        # dataset_of_string = ...
-
 
 # source : https://stackoverflow.com/questions/36238076/what-is-the-equivalent-c-c-loselose-algorithm-in-python
 def lose_lose(data: bytes) -> int:
@@ -89,6 +53,36 @@ def lose_lose(data: bytes) -> int:
     for bytes in data:
         hsh += bytes
     return hsh
+
+
+# Source : http://www.cse.yorku.ca/~oz/hash.html
+def sdbm(data: bytes) -> int:
+    hsh = 0
+    for byte in data:
+        hsh = byte + (hsh << 6) + (hsh << 16) - hsh
+    return hsh & 0xFFFFFFFF
+
+
+def crc32(data: bytes) -> int:
+    """CRC32 checksum via zlib"""
+    return zlib.crc32(data)
+
+
+def djb2(data: bytes) -> int:
+    """DJB2 hash by Dan Bernstein"""
+    hsh = 5381
+    for byte in data:
+        hsh = ((hsh << 5) + hsh) + byte  # hsh * 33 + byte
+    return hsh & 0xFFFFFFFF
+
+
+def fletcher16(data: bytes) -> int:
+    sum1 = 0
+    sum2 = 0
+    for byte in data:
+        sum1 = (sum1 + byte) % 255
+        sum2 = (sum2 + sum1) % 255
+    return (sum2 << 8) | sum1
 
 
 def get_available_algos() -> list[str]:
@@ -100,6 +94,10 @@ def get_available_algos() -> list[str]:
         pass
 
     algos.append("lose_lose")
+    algos.append("sdbm")
+    algos.append("djb2")
+    algos.append("crc32")
+    algos.append("fletcher16")
 
     seen: set[str] = set()
     unique_algos: list[str] = []
@@ -112,8 +110,16 @@ def get_available_algos() -> list[str]:
 
 
 def resolve_hash_algo(name: str) -> Callable[[bytes | Any], Any] | None:
-    if name == "lose_lose":
-        return lose_lose
+    custom_hashes = {
+        "lose_lose": lose_lose,
+        "djb2": djb2,
+        "sdbm": sdbm,
+        "crc32": crc32,
+        "fletcher16": fletcher16,
+    }
+
+    if name in custom_hashes:
+        return custom_hashes[name]
 
     try:
         if name in hashlib.algorithms_available:
@@ -121,53 +127,4 @@ def resolve_hash_algo(name: str) -> Callable[[bytes | Any], Any] | None:
     except Exception:
         pass
 
-    try:
-        handler = passlib.registry.get_crypt_handler(name)
-        if handler is not None:
-            return handler.hash
-    except Exception:
-        pass
-
     return None
-
-
-# dataset_of_list = ...
-# dataset_of_string = ...
-# dataset_of_int    = ...
-# dataset_file = ...
-
-# def md5_hash(self):  # la premiere algo
-#    result_of_hash = hashlib.md5(self.array_to_hash.encode()).hexdigest()
-#    return result_of_hash
-
-# def _hash(self): ...
-
-# def _hash(self): ...
-
-# def _hash(self): ...
-
-# def custom_hash(self):  # la derniere
-
-
-# path = kagglehub.dataset_download("boiniabhiram/wine-quality-dataset")
-
-# print("Path to dataset files:", path)
-
-# Machine_for_hash = Hashator(None)  # fait lui manger ta chaine :wa hasher
-
-# Machine_for_hash2 = Hashator(None)
-# Machine_for_hash.from_integer(12345666532234)  # -> on charge dans la machine
-# Machine_for_hash.from_list([11223, 54445, 45423])
-# print(Machine_for_hash.hashtor(hashlib.sha224))
-# Machine_for_hash.from_file("fr_dict.txt")
-
-# print(dir(hashlib))
-# print(Machine_for_hash.hashtor(hash))
-# print(Machine_for_hash.hashtor(zlib.adler32))
-# print(Machine_for_hash.hashtor(zlib.crc32))
-# print(f"GOST-256: {Machine_for_hash.hashtor(streebog256)}")
-# print(f"GOST-512: {Machine_for_hash.hashtor(streebog512)}")
-# print(f"Win95 LM:   {Machine_for_hash.hashtor(lmhash.hash)}")
-# print(f"Unix DES:   {Machine_for_hash.hashtor(des_crypt.hash)}")
-# print(f"SQL 2000:   {Machine_for_hash.hashtor(mssql2000.hash)}")
-# print(help(hashlib))
