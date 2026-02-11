@@ -85,6 +85,15 @@ def fletcher16(data: bytes) -> int:
     return (sum2 << 8) | sum1
 
 
+def custom_hashage(data: bytes) -> int:
+    hsh = 0
+    for byte in data:
+        hsh = hsh + byte
+        hsh = hsh ^ 0x55AA
+        hsh = byte + (hsh << 6) + (hsh << 16) - hsh
+    return hsh
+
+
 def get_available_algos() -> list[str]:
     algos: list[str] = []
 
@@ -98,6 +107,7 @@ def get_available_algos() -> list[str]:
     algos.append("djb2")
     algos.append("crc32")
     algos.append("fletcher16")
+    algos.append("custom_hashage")
 
     seen: set[str] = set()
     unique_algos: list[str] = []
@@ -116,6 +126,7 @@ def resolve_hash_algo(name: str) -> Callable[[bytes | Any], Any] | None:
         "sdbm": sdbm,
         "crc32": crc32,
         "fletcher16": fletcher16,
+        "custom_hashage": custom_hashage,
     }
 
     if name in custom_hashes:
