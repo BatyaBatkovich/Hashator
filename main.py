@@ -2,7 +2,6 @@ import hashlib
 from Create_image import image, list_2_coord, show_pixel
 from hashage import Hashator, get_available_algos, resolve_hash_algo
 from hashator_cli import ASCII_BANNER, build_parser, format_list
-from passlib.hash import lmhash, mssql2000
 
 
 # Source - https://stackoverflow.com/q/419163
