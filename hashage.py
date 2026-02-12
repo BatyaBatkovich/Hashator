@@ -5,47 +5,7 @@ from collections.abc import Callable  # PEP 585 -> a relire
 from typing import (
     Any,
 )
-
-
-@dataclass
-class Hashator:
-    array_to_hash: list[bytes] | None  # le massiv de data qu'on souhaite hasher
-    # result_of_hash: None  # le result de hash
-
-    def from_list(self, data):  # need to be bytes after this method
-        self.array_to_hash = [str(i).encode() for i in data]
-
-    def from_integer(self, data):
-        self.array_to_hash = [str(data).encode()]
-        return self.array_to_hash
-
-    def from_str(self, data):
-        self.array_to_hash = [data.encode()]
-        return self.array_to_hash
-
-    def from_file(self, filename):
-        with open(filename, "r", errors="ignore") as file:
-            self.array_to_hash = [line.strip().encode() for line in file]
-        return self.array_to_hash
-
-    def hashtor(
-        self, func_hashage: Callable[[bytes | Any], Any]
-    ) -> list:  # FINALEMENT UNE STRING C LA MERDE - A REFAIRE TOUT ICI POUR RECEVOIR UNE LISTE DES HASH
-        if not self.array_to_hash:
-            return []
-
-        result_list = []
-        for element in self.array_to_hash:
-            raw_output = func_hashage(element)
-            # print(f"Hashing element: {element} -> Raw output: {raw_output}")
-            if isinstance(raw_output, int):
-                result_list.append(hex(raw_output))
-            elif hasattr(raw_output, "hexdigest"):
-                result_list.append(raw_output.hexdigest())
-            else:
-                result_list.append(str(raw_output))
-        return result_list
-
+from Class import Hashator
 
 # source : https://stackoverflow.com/questions/36238076/what-is-the-equivalent-c-c-loselose-algorithm-in-python
 def lose_lose(data: bytes) -> int:

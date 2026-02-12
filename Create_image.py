@@ -1,20 +1,7 @@
 from PIL import Image
+from Class import image
 
-
-class image:
-    def __init__(
-        self, width, height, color="white"
-    ):  # Create a blank image with given width, height and background color
-        self.img = Image.new("RGB", (width, height), color=color)
-
-    def set_pixel(self, x, y, color):  # Create a pixel at (x,y) with color
-        self.img.putpixel((x, y), color)
-
-    def save(self, filename):  # Save the image to a file
-        self.img.save(filename)
-
-
-def list_2_coord(list_data):  #  prend en parametre la liste avec les hash
+def list_2_coord(list_data, width, height):  #  prend en parametre la liste avec les hash
     decimal_list = []  # List of tuples to store decimal numbers
     for item in list_data:
         hash_string = item
@@ -23,8 +10,6 @@ def list_2_coord(list_data):  #  prend en parametre la liste avec les hash
         if len(hash_string) < 6:
             hash_string = hash_string.zfill(6)
         hash_string = int(hash_string, 16)
-        width = 512
-        height = 512
         x = hash_string % width
         y = (hash_string // width) % height
 
@@ -42,7 +27,7 @@ def list_2_coord(list_data):  #  prend en parametre la liste avec les hash
 
 
 def show_pixel(
-    decimal_list, im, width=512, height=512
+    decimal_list, im, width, height
 ):  # Function to show pixel superpositions
     for x, y in decimal_list:
         x, y = int(x), int(y)

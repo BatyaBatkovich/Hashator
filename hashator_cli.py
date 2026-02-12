@@ -52,7 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "-f",
         "--file",
-        default="fr_dict.txt",
-        help="Input file to hash (default: fr_dict.txt).",
+        default="datasets/fr_dict.txt",
+        help="Input file to hash (default: datasets/fr_dict.txt).",
     )
     return parser
