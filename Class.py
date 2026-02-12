@@ -1,14 +1,10 @@
 from dataclasses import dataclass
 from collections.abc import Callable  # PEP 585 -> a relire
-from typing import (
-    Any,
-)
+from typing import (Any,)
 from PIL import Image
 
 class image:
-    def __init__(
-        self, width, height, color="white"
-    ):  # Create a blank image with given width, height and background color
+    def __init__(self, width, height, color="white"):  # Create a blank image with given width, height and background color
         self.img = Image.new("RGB", (width, height), color=color)
 
     def set_pixel(self, x, y, color):  # Create a pixel at (x,y) with color
@@ -38,9 +34,7 @@ class Hashator:
             self.array_to_hash = [line.strip().encode() for line in file]
         return self.array_to_hash
 
-    def hashtor(
-        self, func_hashage: Callable[[bytes | Any], Any]
-    ) -> list:  # FINALEMENT UNE STRING C LA MERDE - A REFAIRE TOUT ICI POUR RECEVOIR UNE LISTE DES HASH
+    def hashtor(self, func_hashage: Callable[[bytes | Any], Any]) -> list:  # FINALEMENT UNE STRING C LA MERDE - A REFAIRE TOUT ICI POUR RECEVOIR UNE LISTE DES HASH
         if not self.array_to_hash:
             return []
 
