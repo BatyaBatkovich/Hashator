@@ -14,7 +14,7 @@ cd Hashator
 python -m venv venv
 source venv/bin/activate.fish
 pip install -r requirements.txt
-python main.py -t custom_hashage -d test.png -f small-rockyou.txt
+python main.py -t custom_hashage -d test.png -f ./datasets/small-rockyou.txt
 ```
 ### Bash
 
@@ -24,5 +24,5 @@ cd Hashator
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-python main.py -t custom_hashage -d test.png -f small-rockyou.txt
+python main.py -t custom_hashage -d test.png -f ./datasets/small-rockyou.txt
 ```
